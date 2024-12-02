@@ -1,0 +1,599 @@
+import customtkinter
+import pyperclip  # To copy coupon codes to clipboard
+from datetime import datetime
+from PIL import Image
+
+# Set appearance mode and color theme
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("dark-blue")
+
+root = customtkinter.CTk()
+
+# Set window properties
+root.geometry("800x600")
+root.title("SkyTales")
+root.iconbitmap("./app_icon.ico")
+
+# Function to switch tabs
+def switch_tab(tab_name):
+    for frame in tabs.values():
+        frame.pack_forget()  # Hide all frames
+    tabs[tab_name].pack(fill="both", expand=True, padx=10, pady=10)  # Show the selected frame
+
+# Function to copy coupon code
+def copy_to_clipboard(coupon_code):
+    pyperclip.copy(coupon_code)
+    print(f"Copied: {coupon_code}")
+
+# Create Widgets for "My Trips"
+def create_trips_widgets(parent_frame):
+    # Scrollable frame for trips
+    trips_scroll_frame = customtkinter.CTkScrollableFrame(parent_frame, width=700, height=500)
+    trips_scroll_frame.pack(pady=10, padx=20)
+
+    # Sample trips data with added dates
+    trips_data = [
+        {
+            "date": "2024-12-01",  # Added date
+            "departure_time": "8:30 AM",
+            "arrival_time": "11:00 AM",
+            "boarding_point": "Boston (BOS)",
+            "dropping_point": "Miami (MIA)",
+            "fare": "$275",
+            "tickets": 4,
+        },
+        {
+            "date": "2024-12-02",  # Added date
+            "departure_time": "2:00 PM",
+            "arrival_time": "4:30 PM",
+            "boarding_point": "Washington D.C. (IAD)",
+            "dropping_point": "Atlanta (ATL)",
+            "fare": "$220",
+            "tickets": 1,
+        },
+        {
+            "date": "2024-12-03",  # Added date
+            "departure_time": "6:00 PM",
+            "arrival_time": "8:30 PM",
+            "boarding_point": "Denver (DEN)",
+            "dropping_point": "Phoenix (PHX)",
+            "fare": "$180",
+            "tickets": 2,
+        },
+        {
+            "date": "2024-12-04",  # Added date
+            "departure_time": "9:15 AM",
+            "arrival_time": "11:45 AM",
+            "boarding_point": "Houston (IAH)",
+            "dropping_point": "San Diego (SAN)",
+            "fare": "$230",
+            "tickets": 5,
+        },
+        {
+            "date": "2024-12-05",  # Added date
+            "departure_time": "1:30 PM",
+            "arrival_time": "3:30 PM",
+            "boarding_point": "Dallas (DFW)",
+            "dropping_point": "Orlando (MCO)",
+            "fare": "$190",
+            "tickets": 3,
+        },
+        {
+            "date": "2024-12-06",  # Added date
+            "departure_time": "11:00 AM",
+            "arrival_time": "1:30 PM",
+            "boarding_point": "Los Angeles (LAX)",
+            "dropping_point": "Las Vegas (LAS)",
+            "fare": "$120",
+            "tickets": 2,
+        },
+        {
+            "date": "2024-12-07",  # Added date
+            "departure_time": "7:30 AM",
+            "arrival_time": "9:45 AM",
+            "boarding_point": "Chicago (ORD)",
+            "dropping_point": "Detroit (DTW)",
+            "fare": "$160",
+            "tickets": 4,
+        },
+    ]
+
+    # Create a widget for each trip
+    for trip in trips_data:
+        trip_frame = customtkinter.CTkFrame(trips_scroll_frame, corner_radius=10)
+        trip_frame.pack(fill="x", pady=10, padx=5)
+
+        # Trip Details with date
+        trip_details = (
+            f"Date: {trip['date']}\n"
+            f"Departure: {trip['departure_time']} | Arrival: {trip['arrival_time']}\n"
+            f"Boarding: {trip['boarding_point']} | Dropping: {trip['dropping_point']}\n"
+            f"Fare: {trip['fare']} | Tickets: {trip['tickets']}"
+        )
+        trip_label = customtkinter.CTkLabel(trip_frame, text=trip_details, font=("Arial", 14), anchor="w", justify="left")
+        trip_label.pack(fill="x", padx=10, pady=10)
+        
+# Sample flight data
+flight_data = [
+    {
+        "from": "Boston (BOS)",
+        "to": "Miami (MIA)",
+        "date": "2024-12-01",
+        "departure_time": "8:30 AM",
+        "arrival_time": "11:00 AM",
+        "fare": "$275",
+    },
+    {
+        "from": "Washington D.C. (IAD)",
+        "to": "Atlanta (ATL)",
+        "date": "2024-12-02",
+        "departure_time": "2:00 PM",
+        "arrival_time": "4:30 PM",
+        "fare": "$220",
+    },
+    {
+        "from": "Denver (DEN)",
+        "to": "Phoenix (PHX)",
+        "date": "2024-12-03",
+        "departure_time": "6:00 PM",
+        "arrival_time": "8:30 PM",
+        "fare": "$180",
+    },
+    # Add more sample flights here
+]
+
+# Function to create flight booking widgets on homepage
+def create_homepage_widgets(parent_frame):
+    booking_frame = customtkinter.CTkFrame(parent_frame, corner_radius=10)
+    booking_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+    # Title
+    booking_title = customtkinter.CTkLabel(
+        booking_frame, text="Flight Booking", font=("Arial", 18, "bold")
+    )
+    booking_title.pack(pady=10)
+
+    # Dropdowns for 'From' and 'To'
+    from_label = customtkinter.CTkLabel(booking_frame, text="From:")
+    from_label.pack(anchor="w", padx=10)
+    from_dropdown = customtkinter.CTkComboBox(
+        booking_frame, values=["Boston (BOS)", "Washington D.C. (IAD)", "Denver (DEN)"]
+    )
+    from_dropdown.pack(fill="x", padx=10, pady=5)
+
+    to_label = customtkinter.CTkLabel(booking_frame, text="To:")
+    to_label.pack(anchor="w", padx=10)
+    to_dropdown = customtkinter.CTkComboBox(
+        booking_frame, values=["Miami (MIA)", "Atlanta (ATL)", "Phoenix (PHX)"]
+    )
+    to_dropdown.pack(fill="x", padx=10, pady=5)
+
+    # Date picker
+    date_label = customtkinter.CTkLabel(booking_frame, text="Select Date:")
+    date_label.pack(anchor="w", padx=10)
+    date_entry = customtkinter.CTkEntry(booking_frame, placeholder_text="YYYY-MM-DD")
+    date_entry.pack(fill="x", padx=10, pady=5)
+
+    # Seats selection
+    seats_label = customtkinter.CTkLabel(booking_frame, text="Number of Seats:")
+    seats_label.pack(anchor="w", padx=10)
+    seats_frame = customtkinter.CTkFrame(booking_frame, fg_color="transparent")
+    seats_frame.pack(anchor="w", padx=10, pady=5)
+
+    seat_count = customtkinter.IntVar(value=1)
+
+    def increase_seats():
+        seat_count.set(seat_count.get() + 1)
+
+    def decrease_seats():
+        if seat_count.get() > 1:
+            seat_count.set(seat_count.get() - 1)
+
+    minus_button = customtkinter.CTkButton(seats_frame, text="-", command=decrease_seats, width=40)
+    minus_button.pack(side="left", padx=5)
+
+    seats_label = customtkinter.CTkLabel(seats_frame, textvariable=seat_count)
+    seats_label.pack(side="left", padx=5)
+
+    plus_button = customtkinter.CTkButton(seats_frame, text="+", command=increase_seats, width=40)
+    plus_button.pack(side="left", padx=5)
+
+    # Search button and results display
+    def search_flights():
+        selected_from = from_dropdown.get()
+        selected_to = to_dropdown.get()
+        selected_date = date_entry.get()
+        selected_seats = seat_count.get()
+
+        # Filter flights based on input
+        results = [
+            flight
+            for flight in flight_data
+            if flight["from"] == selected_from
+            and flight["to"] == selected_to
+            and flight["date"] == selected_date
+        ]
+
+        # Clear previous results
+        for widget in results_frame.winfo_children():
+            widget.destroy()
+
+        # Show results
+        if results:
+            for flight in results:
+                result_text = (
+                    f"Departure: {flight['departure_time']} | Arrival: {flight['arrival_time']}\n"
+                    f"Fare: {flight['fare']} for {selected_seats} seat(s)"
+                )
+                flight_label = customtkinter.CTkLabel(
+                    results_frame, text=result_text, font=("Arial", 14), justify="left"
+                )
+                flight_label.pack(fill="x", padx=10, pady=5)
+        else:
+            no_result_label = customtkinter.CTkLabel(
+                results_frame, text="No flights available for the selected criteria.", font=("Arial", 14)
+            )
+            no_result_label.pack(fill="x", padx=10, pady=5)
+
+    search_button = customtkinter.CTkButton(
+        booking_frame, text="Search Flights", command=search_flights
+    )
+    search_button.pack(pady=10)
+
+    results_frame = customtkinter.CTkFrame(booking_frame, corner_radius=10)
+    results_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+def create_support_widgets(parent_frame):
+    support_frame = customtkinter.CTkFrame(parent_frame, width=700, height=500, corner_radius=10)
+    support_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+    # Contact Us Title
+    contact_label = customtkinter.CTkLabel(
+        support_frame,
+        text="Contact Us",
+        font=("Arial", 18, "bold"),
+        text_color="#276FAD"
+    )
+    contact_label.pack(pady=(10, 5))
+
+    # Icons for Email, Phone, and Address
+    address_icon = customtkinter.CTkImage(light_image=Image.open("address_icon.png"), size=(30, 30))
+    email_icon = customtkinter.CTkImage(light_image=Image.open("email_icon.png"), size=(30, 30))
+    phone_icon = customtkinter.CTkImage(light_image=Image.open("phone_icon.png"), size=(30, 30))
+
+    # Address Widget
+    address_widget = customtkinter.CTkFrame(support_frame, corner_radius=10, fg_color="gray25")
+    address_widget.pack(fill="x", padx=10, pady=5)
+
+    address_icon_label = customtkinter.CTkLabel(address_widget, image=address_icon, text="")
+    address_icon_label.pack(side="left", padx=10, pady=10)
+
+    address_label = customtkinter.CTkLabel(
+        address_widget,
+        text="123 Aviation Avenue, Suite 456\nFlight City, FC 12345\nUnited States",
+        font=("Arial", 14),
+        text_color="lightgray",
+        justify="left",
+        anchor="w",
+    )
+    address_label.pack(side="left", padx=10, pady=10)
+
+    # Email Widget
+    email_widget = customtkinter.CTkFrame(support_frame, corner_radius=10, fg_color="gray25")
+    email_widget.pack(fill="x", padx=10, pady=5)
+
+    email_icon_label = customtkinter.CTkLabel(email_widget, image=email_icon, text="")
+    email_icon_label.pack(side="left", padx=10, pady=10)
+
+    email_label = customtkinter.CTkLabel(
+        email_widget,
+        text="support@myflights.com",
+        font=("Arial", 14),
+        text_color="lightgray",
+        justify="left",
+        anchor="w",
+    )
+    email_label.pack(side="left", padx=10, pady=10)
+
+    # Phone Widget
+    phone_widget = customtkinter.CTkFrame(support_frame, corner_radius=10, fg_color="gray25")
+    phone_widget.pack(fill="x", padx=10, pady=5)
+
+    phone_icon_label = customtkinter.CTkLabel(phone_widget, image=phone_icon, text="")
+    phone_icon_label.pack(side="left", padx=10, pady=10)
+
+    phone_label = customtkinter.CTkLabel(
+        phone_widget,
+        text="+1 (123) 456-7890",
+        font=("Arial", 14),
+        text_color="lightgray",
+        justify="left",
+        anchor="w",
+    )
+    phone_label.pack(side="left", padx=10, pady=10)
+
+    # FAQs Section
+    faq_title_widget = customtkinter.CTkFrame(support_frame, corner_radius=10, fg_color="gray25")
+    faq_title_widget.pack(fill="x", padx=10, pady=5)
+
+    faq_title_label = customtkinter.CTkLabel(
+        faq_title_widget,
+        text="Frequently Asked Questions",
+        font=("Arial", 16, "bold"),
+        text_color="#276FAD",
+        justify="left",
+        anchor="w",
+    )
+    faq_title_label.pack(padx=10, pady=10)
+
+    faq_data = [
+        {"question": "How can I cancel my booking?", "answer": "You can cancel your booking through the 'My Trips' section of the app."},
+        {"question": "Can I change my flight dates?", "answer": "Yes, flight dates can be changed from the 'My Trips' section. Additional charges may apply."},
+        {"question": "What payment methods are accepted?", "answer": "We accept credit cards, debit cards, net banking, and UPI payments."},
+        {"question": "How do I apply a coupon code?", "answer": "Coupon codes can be applied at the checkout screen before making the payment."},
+    ]
+
+    def toggle_answer(answer_label, arrow_label):
+        if answer_label.winfo_ismapped():
+            answer_label.pack_forget()  # Hide the answer
+            arrow_label.configure(text="▶")  # Change to collapsed arrow
+        else:
+            answer_label.pack(fill="x", padx=10, pady=5)  # Show the answer
+            arrow_label.configure(text="▼")  # Change to expanded arrow
+
+    for faq in faq_data:
+        faq_widget = customtkinter.CTkFrame(support_frame, corner_radius=10, fg_color="gray25")
+        faq_widget.pack(fill="x", padx=10, pady=5)
+
+        question_frame = customtkinter.CTkFrame(faq_widget, fg_color="transparent")
+        question_frame.pack(fill="x", padx=10, pady=5)
+
+        arrow_label = customtkinter.CTkLabel(
+            question_frame,
+            text="▶",
+            font=("Arial", 14),
+            text_color="white"
+        )
+        arrow_label.pack(side="left", padx=5)
+
+        answer_label = customtkinter.CTkLabel(
+            faq_widget,
+            text=faq["answer"],
+            font=("Arial", 12),
+            text_color="lightgray",
+            anchor="w",
+            justify="left",
+            wraplength=600
+        )
+        answer_label.pack_forget()  # Start hidden
+
+        question_button = customtkinter.CTkButton(
+            question_frame,
+            text=faq["question"],
+            font=("Arial", 14, "bold"),
+            text_color="white",
+            fg_color="transparent",
+            hover_color="gray30",
+            anchor="w",
+            command=lambda al=arrow_label, ans=answer_label: toggle_answer(ans, al)
+        )
+        question_button.pack(side="left", fill="x", expand=True, padx=5)
+
+
+
+def create_offers_widgets(parent_frame):
+    # Scrollable Frame for Offers
+    offers_scroll_frame = customtkinter.CTkScrollableFrame(parent_frame, width=700, height=500)
+    offers_scroll_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+    # Bank Offers Section
+    bank_offer_label = customtkinter.CTkLabel(
+        offers_scroll_frame,
+        text="Bank Offers",
+        font=("Arial", 18, "bold"),
+        text_color="#276FAD"
+    )
+    bank_offer_label.pack(pady=(10, 5))
+
+    # Bank Offers Widgets
+    bank_offers_data = [
+        {"title": "Save up to 50% on SBI Credit Cards", "details": "Applicable on domestic flights only"},
+        {"title": "10% Cashback with HDFC Bank Debit Cards", "details": "Valid on international flights"},
+        {"title": "Flat ₹2000 off with ICICI Bank Cards", "details": "Min booking of ₹10,000 required"},
+    ]
+
+    for offer in bank_offers_data:
+        bank_offer_frame = customtkinter.CTkFrame(offers_scroll_frame, corner_radius=10)
+        bank_offer_frame.pack(fill="x", pady=10, padx=10)
+
+        # Offer Title
+        offer_title = customtkinter.CTkLabel(
+            bank_offer_frame,
+            text=offer["title"],
+            font=("Arial", 16, "bold"),
+            anchor="w"
+        )
+        offer_title.pack(fill="x", padx=10, pady=5)
+
+        # Offer Details
+        offer_details = customtkinter.CTkLabel(
+            bank_offer_frame,
+            text=offer["details"],
+            font=("Arial", 14),
+            anchor="w"
+        )
+        offer_details.pack(fill="x", padx=10, pady=5)
+
+    # Coupon Codes Section
+    coupon_label = customtkinter.CTkLabel(
+        offers_scroll_frame,
+        text="Coupon Codes",
+        font=("Arial", 18, "bold"),
+        text_color="#276FAD"
+    )
+    coupon_label.pack(pady=(20, 5))
+
+    # Sample Coupon Data
+    coupon_data = [
+        {
+            "code": "FLIGHT50",
+            "expiry": "2024-12-31",
+            "details": "UPTO 50% OFF",
+            "terms": "Min booking of ₹5000",
+        },
+        {
+            "code": "GET2000",
+            "expiry": "2024-11-30",
+            "details": "Flat ₹2000 OFF",
+            "terms": "Applicable on all domestic flights",
+        },
+        {
+            "code": "SAVE10",
+            "expiry": "2024-12-15",
+            "details": "10% OFF",
+            "terms": "Max discount ₹1000",
+        },
+    ]
+
+    for coupon in coupon_data:
+        coupon_frame = customtkinter.CTkFrame(offers_scroll_frame, corner_radius=10)
+        coupon_frame.pack(fill="x", pady=10, padx=10)
+
+        # Coupon Details
+        coupon_details = (
+            f"Code: {coupon['code']}\n"
+            f"Expires: {coupon['expiry']}\n"
+            f"{coupon['details']}\n"
+            f"Terms: {coupon['terms']}"
+        )
+        coupon_details_label = customtkinter.CTkLabel(
+            coupon_frame,
+            text=coupon_details,
+            font=("Arial", 14),
+            anchor="w",
+            justify="left"
+        )
+        coupon_details_label.pack(side="left", fill="both", padx=10, pady=10)
+
+        # Copy Button
+        copy_button = customtkinter.CTkButton(
+            coupon_frame,
+            text="Copy Code",
+            command=lambda code=coupon["code"]: copy_to_clipboard(code),
+            width=100
+        )
+        copy_button.pack(side="right", padx=10, pady=10)
+
+
+# New Window Function
+def open_new_window():
+    new_window = customtkinter.CTkToplevel()
+    new_window.geometry("800x600")
+    new_window.title("SkyTales")
+    new_window.iconbitmap("./app_icon.ico")
+
+    # Sidebar Frame
+    sidebar = customtkinter.CTkFrame(new_window, width=150, corner_radius=0)
+    sidebar.pack(side="left", fill="y")
+
+    # Sidebar Title
+    sidebar_label = customtkinter.CTkLabel(sidebar, text="SkyTales", font=("Arial", 16))
+    sidebar_label.pack(pady=20)
+
+    # Sidebar Buttons
+    sidebar_buttons = [
+        ("Homepage", "homepage"),
+        ("My Account", "account"),
+        ("My Trips", "trips"),
+        ("Offers", "offers"),
+        ("Support", "support"),
+    ]
+    for text, tab_name in sidebar_buttons:
+        button = customtkinter.CTkButton(sidebar, text=text, command=lambda t=tab_name: switch_tab(t))
+        button.pack(pady=10, padx=20)
+
+    # Main Content Frames (Tabs)
+    global tabs
+    tabs = {
+        "homepage": customtkinter.CTkFrame(new_window, corner_radius=10),
+        "account": customtkinter.CTkFrame(new_window, corner_radius=10),
+        "trips": customtkinter.CTkFrame(new_window, corner_radius=10),
+        "offers": customtkinter.CTkFrame(new_window, corner_radius=10),
+        "support": customtkinter.CTkFrame(new_window, corner_radius=10),
+    }
+
+    # Add Content to Each Tab
+    customtkinter.CTkLabel(tabs["homepage"], text="Home", font=("Arial", 24)).pack(expand=True)
+    customtkinter.CTkLabel(tabs["account"], text="Account Details", font=("Arial", 24)).pack(expand=True)
+    create_trips_widgets(tabs["trips"])  # Add Trips Content
+    create_offers_widgets(tabs["offers"])  # Add Offers Content
+    create_support_widgets(tabs["support"])
+    create_homepage_widgets(tabs["homepage"])
+
+
+    # Function to change the theme based on dropdown selection
+    def change_theme(theme):
+        customtkinter.set_appearance_mode(theme.lower())  # 'light' or 'dark'
+
+    # Create the dropdown (combobox) in the sidebar
+    theme_dropdown = customtkinter.CTkComboBox(sidebar, 
+                                               values=["Light", "Dark"], 
+                                               command=change_theme)
+    theme_dropdown.set("Dark")  # Set default value
+    theme_dropdown.pack(side="bottom", pady=20, padx=20)  # Positioned at the bottom
+
+
+
+
+    # Show default tab (My Account)
+    switch_tab("account")
+
+    # Run the new window
+    new_window.mainloop()
+
+# Login/Register Tabs
+tabview = customtkinter.CTkTabview(master=root, height=500)
+tabview.pack(padx=20, pady=20)
+
+# Add tabs
+tabview.add("Register")  # Add tab at the end
+tabview.add("Login")     # Add tab at the end
+tabview.set("Register")  # Set currently visible tab
+
+# Login Tab Fields
+email_field = customtkinter.CTkEntry(master=tabview.tab("Login"), placeholder_text="Enter your email address", width=400)
+email_field.pack(padx=10, pady=(50, 10), ipadx=10, ipady=5)
+
+pass_field = customtkinter.CTkEntry(master=tabview.tab("Login"), placeholder_text="Enter the OTP", width=400)
+pass_field.pack(padx=10, ipadx=10, ipady=5)
+
+log_gen_otp_btn = customtkinter.CTkButton(master=tabview.tab("Login"), text="Generate OTP", width=400, command=open_new_window)
+log_gen_otp_btn.pack(padx=10, pady=10, ipadx=10, ipady=5)
+
+login_btn = customtkinter.CTkButton(master=tabview.tab("Login"), text="Login", width=400, command=open_new_window)
+login_btn.pack(padx=10, pady=10, ipadx=10, ipady=5)
+
+# Register Tab Fields
+reg_name_field = customtkinter.CTkEntry(master=tabview.tab("Register"), placeholder_text="Enter your full name", width=400)
+reg_name_field.pack(padx=10, pady=(50, 10), ipadx=10, ipady=5)
+
+reg_email_field = customtkinter.CTkEntry(master=tabview.tab("Register"), placeholder_text="Enter your email address", width=400)
+reg_email_field.pack(padx=10, pady=(0, 10), ipadx=10, ipady=5)
+
+reg_phone_field = customtkinter.CTkEntry(master=tabview.tab("Register"), placeholder_text="Enter your phone number", width=400)
+reg_phone_field.pack(padx=10, pady=(0, 10), ipadx=10, ipady=5)
+
+reg_dob_field = customtkinter.CTkEntry(master=tabview.tab("Register"), placeholder_text="Enter your date of birth", width=400)
+reg_dob_field.pack(padx=10, pady=(0, 10), ipadx=10, ipady=5)
+
+reg_gen_otp_field = customtkinter.CTkEntry(master=tabview.tab("Register"), placeholder_text="Enter the OTP", width=400)
+reg_gen_otp_field.pack(padx=10, pady=(0, 10), ipadx=10, ipady=5)
+
+reg_gen_otp_btn = customtkinter.CTkButton(master=tabview.tab("Register"), text="Generate OTP", width=400, command=open_new_window)
+reg_gen_otp_btn.pack(padx=10, pady=(0, 10), ipadx=10, ipady=5)
+
+register_btn = customtkinter.CTkButton(master=tabview.tab("Register"), text="Register", width=400, command=open_new_window)
+register_btn.pack(padx=10, pady=(0, 10), ipadx=10, ipady=5)
+
+# Run the application
+root.mainloop()
